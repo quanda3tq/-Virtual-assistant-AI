@@ -1,2 +1,2 @@
 # -Virtual-assistant-AI
-Bài code cho đồ án năm 8/2025
+Bài code cho đồ án tháng 8/2025
