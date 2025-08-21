@@ -1,10 +1,7 @@
-version: "3.9"
-
 services:
-  db:
+  postgres:
     image: pgvector/pgvector:pg17
-    container_name: pgvector_db
-    restart: always
+    container_name: postgres_container
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -12,20 +9,31 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
 
   backend:
-    build: ./BackEnd
-    container_name: assistant_backend
-    restart: always
-    env_file:
-      - .env
-    depends_on:
-      - db
+    build:
+      context: ./BackEnd
+      dockerfile: Dockerfile
+    container_name: backend_container
+    env_file: .env
     ports:
-      - "${APP_PORT}:8000"
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - postgres
     volumes:
       - ./BackEnd:/app
 
 volumes:
-  pgdata:
+  postgres_data:

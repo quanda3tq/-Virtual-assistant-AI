@@ -1,8 +1,12 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/voice", tags=["Voice"])
 
-@router.post("/to-text")
-def voice_to_text(audio_file: str):
-    # TODO: convert audio -> text
-    return {"text": "Xin chào (mock)"}
+class VoiceRequest(BaseModel):
+    text: str
+
+@router.post("/tts")
+async def text_to_speech(req: VoiceRequest):
+    # Thực tế: gọi API TTS (VD: gTTS hoặc OpenAI TTS)
+    return {"msg": "Voice generated successfully", "text": req.text}
