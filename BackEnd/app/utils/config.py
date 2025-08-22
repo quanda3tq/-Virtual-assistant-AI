@@ -1,28 +1,33 @@
 import os
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
-    # Database
+    # ==== DATABASE CONFIG ====
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
-    POSTGRES_HOST: str = "localhost"
-    POSTGRES_PORT: int = 5432
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
 
-    # OpenAI
-    OPENAI_API_KEY: str = ""
+    # ==== PGADMIN CONFIG ====
+    PGADMIN_DEFAULT_EMAIL: str
+    PGADMIN_DEFAULT_PASSWORD: str
 
-    # App
+    # ==== OPENAI CONFIG ====
+    OPENAI_API_KEY: str | None = None
+
+    # ==== APP CONFIG ====
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
     DEBUG: bool = True
 
-    # PgAdmin
-    PGADMIN_DEFAULT_EMAIL: str = "admin@example.com"
-    PGADMIN_DEFAULT_PASSWORD: str = "admin"
+    # Cấu hình load từ file .env
+    model_config = SettingsConfigDict(
+        env_file="../.env",
+        env_file_encoding="utf-8",
+    )
 
-    class Config:
-        env_file = ".env"   # Load từ file .env trong thư mục gốc
 
-# Singleton settings
+# Singleton settings (import ra toàn project)
 settings = Settings()

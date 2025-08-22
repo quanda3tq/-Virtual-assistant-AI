@@ -3,7 +3,7 @@ from app.utils.config import settings
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-def ask_chatgpt(prompt: str):
+def ask_openai(prompt: str):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
